@@ -11,7 +11,7 @@ require([
   ],
   function (_, $) {
 
-    var Impure = {
+    const Impure = {
       getJSON: _.curry(function(callback, url) {
         $.getJSON(url, callback);
       }),
@@ -21,22 +21,16 @@ require([
       })
     };
 
-    var img = function (url) {
-      return $('<img />', { src: url });
-    };
+    const img = url => $('<img />', { src: url })
+    const url = t => `https://api.flickr.com/services/feeds/photos_public.gne?tags=${t}&format=json&jsoncallback=?`
+    
 
-    ////////////////////////////////////////////
-
-    var url = function (t) {
-      return 'https://api.flickr.com/services/feeds/photos_public.gne?tags=' + t + '&format=json&jsoncallback=?';
-    };
-
-    var mediaUrl = _.compose(_.prop('m'), _.prop('media'));
-    var srcs = _.compose(_.map(mediaUrl), _.prop('items'));
-    var images = _.compose(_.map(img), srcs);
-    var renderImages = _.compose(Impure.setHtml("body"), images);
+    const mediaUrl = _.compose(_.prop('m'), _.prop('media'));
+    const srcs = _.compose(_.map(mediaUrl), _.prop('items'));
+    const images = _.compose(_.map(img), srcs);
+    const renderImages = _.compose(Impure.setHtml("body"), images);
     // callback：renderImages
-    var app = _.compose(Impure.getJSON(renderImages), url);
+    const app = _.compose(Impure.getJSON(renderImages), url);
 
     app("cats");
   });
