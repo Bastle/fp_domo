@@ -20,6 +20,7 @@ require([
         $(sel).html(html);
       })
     };
+ 
 
     const img = url => $('<img />', { src: url })
     const url = t => `https://api.flickr.com/services/feeds/photos_public.gne?tags=${t}&format=json&jsoncallback=?`
@@ -31,6 +32,7 @@ require([
     const renderImages = _.compose(Impure.setHtml("body"), images);
     // callback：renderImages
     const app = _.compose(Impure.getJSON(renderImages), url);
-
+  
     app("cats");
+
   });
